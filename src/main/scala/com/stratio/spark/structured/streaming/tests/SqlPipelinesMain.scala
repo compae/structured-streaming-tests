@@ -51,6 +51,7 @@ object SqlPipelinesMain extends App with Logging {
     .queryName("consolequery")
     .start()
 
+  //Collect to Driver!!
   val memoryQuery = csvDF.writeStream
     .outputMode(OutputMode.Append())
     .format("memory")
@@ -64,7 +65,7 @@ object SqlPipelinesMain extends App with Logging {
   val joinData = sparkSession.sql("select js.name, cd.name, js.age, cd.age from csvquery js join jsondata cd on js.name = cd.name")
   joinData.show()
 
-  // Executed in all the streams, not change to batch
+  // Executed in all the streams, not change to batch and not collect to Driver
   val joinQuery = csvDF.crossJoin(jsonDF).writeStream
     .outputMode(OutputMode.Append())
     .format("console")

@@ -24,15 +24,19 @@ object UnStructuredFileSourceMain extends App with Logging {
 
   /** Initializing source streams **/
 
-  val userSchema = new StructType().add("name", "string").add("age", "integer")
+  case class Person(name: String, age: Int)
+
+  import org.apache.spark.sql.Encoders
+  val userSchema = Encoders.product[Person].schema
 
   val csvDF = sparkSession
     .readStream
     .option("sep", ",")
     .schema(userSchema) // Specify schema of the csv files in unstructured sources
+    //.option("maxFilesPerTrigger", 1)
     .csv("/tmp/csv")
 
-  val filtered = csvDF.select("name", "age").where("age > 18")
+  val filtered = csvDF.select("name", "age").where("age > 18").dropDuplicates("name")
 
   // select age, count(*) as total from filtered group by age
   val aggregated = csvDF.groupBy("age").agg("*" -> "count")

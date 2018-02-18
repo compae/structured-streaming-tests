@@ -57,7 +57,7 @@ object AggregationsMain extends App with Logging {
   // Generate running basic counts
   val sqrtCounts = fixedDataWithSqrt
     .groupBy("roundsqrt") //Necessary aggregation: groupBy, cube, rollup
-    .count()
+    .agg(count('*) as "total")
 
   val wordCounts = words
     .groupBy("value") //Necessary aggregation: groupBy, cube, rollup
