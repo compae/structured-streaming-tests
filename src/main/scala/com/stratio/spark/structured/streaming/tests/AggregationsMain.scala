@@ -90,12 +90,12 @@ object AggregationsMain extends App with Logging {
     .outputMode(OutputMode.Complete())
     .trigger(Trigger.ProcessingTime(10, TimeUnit.SECONDS))
     .format("console")
-    .queryName("randomCounts")
+    .queryName("sqrtCountsQuery")
 
   val wordCountsQuery = wordCounts.writeStream
     .outputMode(OutputMode.Complete())
     .format("console")
-    .queryName("wordCounts")
+    .queryName("wordCountsQuery")
 
   val sqrtAggregationsQuery = sqrtAggregations.writeStream
     .outputMode(OutputMode.Complete())
@@ -104,16 +104,17 @@ object AggregationsMain extends App with Logging {
     //.option("checkpointLocation", "/tmp/checkpoint")
     .trigger(Trigger.ProcessingTime(10, TimeUnit.SECONDS))
     .format("console")
-    .queryName("fixedDataAggregations")
+    .queryName("sqrtAggregationsQuery")
 
   val employeeAggregationsQuery = employeeAggregations.writeStream
     .outputMode(OutputMode.Complete())
     .format("console")
-    .queryName("employeeAggregations")
+    .queryName("employeeAggregationsQuery")
 
 
   /** Start queries **/
 
+  //Only one aggregation supported over the same stream
   val sqrtCountsExecution = sqrtCountsQuery.start()
   val wordCountsExecution = wordCountsQuery.start()
   //val sqrtAggregationsExecution = sqrtAggregationsQuery.start()

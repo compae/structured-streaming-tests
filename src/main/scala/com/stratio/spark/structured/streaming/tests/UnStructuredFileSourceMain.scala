@@ -22,9 +22,6 @@ object UnStructuredFileSourceMain extends App with Logging {
     .config(sparkConf)
     .getOrCreate()
 
-  import sparkSession.implicits._
-
-
   /** Initializing source streams **/
 
   val userSchema = new StructType().add("name", "string").add("age", "integer")

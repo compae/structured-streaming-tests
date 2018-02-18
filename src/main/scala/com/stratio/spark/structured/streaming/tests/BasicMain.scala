@@ -52,13 +52,13 @@ object BasicMain extends App with Logging {
     //.trigger(Trigger.Once())
     //.trigger(Trigger.ProcessingTime(6, TimeUnit.SECONDS))
     //.trigger(Trigger.ProcessingTime(10, TimeUnit.SECONDS))
-    .queryName("random")
+    .queryName("fixedQuery")
 
   // First query from socket (only one query supported with this source)
   val linesQuery = lines.writeStream
     .outputMode(OutputMode.Append())
     .format("console")
-    .queryName("lines")
+    .queryName("linesQuery")
 
   // Split the lines into words
   val words = lines.as[String]
@@ -71,7 +71,7 @@ object BasicMain extends App with Logging {
   val wordsQuery = words.writeStream
     .outputMode(OutputMode.Append())
     .format("console")
-    .queryName("words")
+    .queryName("wordsQuery")
 
 
   /** Start queries **/
