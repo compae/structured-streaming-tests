@@ -1,19 +1,18 @@
-package com.stratio.spark.structured.streaming.tests
+package com.stratio.spark.structured.streaming.help
 
-import java.sql.Timestamp
 import java.util.concurrent.TimeUnit
 
+import akka.event.slf4j.SLF4JLogging
 import org.apache.spark.SparkConf
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
-import org.apache.spark.sql.{Encoder, Row, SparkSession}
-import org.apache.spark.sql.catalyst.expressions.{GenericRowWithSchema, Literal}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.{OutputMode, Trigger}
 import org.apache.spark.sql.types.{StringType, StructField, StructType, TimestampType}
+import org.apache.spark.sql.{Encoder, Row, SparkSession}
 
 
-object WindowWatermarksMain extends App with Logging {
+object WindowWatermarksMain extends App with SLF4JLogging {
 
   /** Creating context **/
 
@@ -24,12 +23,12 @@ object WindowWatermarksMain extends App with Logging {
     .config(sparkConf)
     .getOrCreate()
 
-  import sparkSession.implicits._
   import org.apache.spark.sql.ForeachWriter
+  import sparkSession.implicits._
 
   val writer = new ForeachWriter[Row] {
     override def open(partitionId: Long, version: Long) = true
-    override def process(value: Row) = println(value)
+    override def process(value: Row) = log.info(value.toString())
     override def close(errorOrNull: Throwable) = {}
   }
 

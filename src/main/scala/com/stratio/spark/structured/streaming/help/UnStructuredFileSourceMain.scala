@@ -1,17 +1,13 @@
-package com.stratio.spark.structured.streaming.tests
+package com.stratio.spark.structured.streaming.help
 
-import java.util.concurrent.TimeUnit
-
+import akka.event.slf4j.SLF4JLogging
 import org.apache.spark.SparkConf
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.catalyst.expressions.Literal
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.streaming.{OutputMode, Trigger}
-import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.streaming.OutputMode
 
 
-object UnStructuredFileSourceMain extends App with Logging {
+object UnStructuredFileSourceMain extends App with SLF4JLogging {
 
   /** Creating context **/
 

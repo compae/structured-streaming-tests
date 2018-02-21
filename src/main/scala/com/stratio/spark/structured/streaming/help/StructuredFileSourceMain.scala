@@ -1,5 +1,6 @@
-package com.stratio.spark.structured.streaming.tests
+package com.stratio.spark.structured.streaming.help
 
+import akka.event.slf4j.SLF4JLogging
 import org.apache.spark.SparkConf
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession
@@ -7,7 +8,7 @@ import org.apache.spark.sql.streaming.OutputMode
 import org.apache.spark.sql.types.StructType
 
 
-object StructuredFileSourceMain extends App with Logging {
+object StructuredFileSourceMain extends App with SLF4JLogging {
 
   /** Creating context **/
 
