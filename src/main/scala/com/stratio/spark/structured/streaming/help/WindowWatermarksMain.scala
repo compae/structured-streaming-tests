@@ -1,11 +1,13 @@
 package com.stratio.spark.structured.streaming.help
 
+import java.sql.Timestamp
 import java.util.concurrent.TimeUnit
 
 import akka.event.slf4j.SLF4JLogging
 import org.apache.spark.SparkConf
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
+import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.{OutputMode, Trigger}
 import org.apache.spark.sql.types.{StringType, StructField, StructType, TimestampType}
@@ -48,8 +50,8 @@ object WindowWatermarksMain extends App with SLF4JLogging {
   val words = lines.as[String]
     .flatMap(lineString => lineString.split(" "))
     .toDF()
-    .withColumn("fecha", current_timestamp())
-    /*.map { row =>
+    //.withColumn("fecha", current_timestamp())
+    .map { row =>
       val oldvalues = row.toSeq
       val newValues = {
         if(row.toString().contains("minute"))
@@ -63,13 +65,13 @@ object WindowWatermarksMain extends App with SLF4JLogging {
       }
 
       new GenericRowWithSchema(newValues.toArray, schema).asInstanceOf[Row]
-    }(RowEncoder(schema))*/
+    }(RowEncoder(schema))
 
 
   /** Creating aggregations to execute **/
 
   val randomCounts = words
-    .withWatermark("fecha", "1 minutes")
+    .withWatermark("fecha", "5 minutes")
     .groupBy(window($"fecha", "1 minutes", "1 minutes") as "groupdate", $"value")
     .agg(count("value") as "count")
 

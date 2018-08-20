@@ -1,11 +1,12 @@
 package com.stratio.spark.structured.streaming.help
 
 import akka.event.slf4j.SLF4JLogging
+import com.stratio.spark.structured.streaming.help.UnStructuredFileSourceMain.Person
 import org.apache.spark.SparkConf
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.streaming.OutputMode
-import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 
 
 object StructuredFileSourceMain extends App with SLF4JLogging {
@@ -21,9 +22,12 @@ object StructuredFileSourceMain extends App with SLF4JLogging {
     .getOrCreate()
 
   /** Initializing source streams **/
+  case class Person(name: String, age: Int)
 
+  import org.apache.spark.sql.Encoders
+  val encoderSchema = Encoders.product[Person].schema
   val userSchema = new StructType().add("name", "string").add("age", "integer")
-
+  val otherSchemaWay = new StructType(Array(StructField("name", StringType), StructField("age", IntegerType)))
   val jsonDF = sparkSession
     .readStream
     .schema(userSchema) // Specify schema of the json
